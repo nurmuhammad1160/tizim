@@ -1,0 +1,17 @@
+{% extends 'boshliq/index.html' %}
+
+{% block title %}
+    Mahsulot qo'shish
+{% endblock %}
+
+{% block content %}
+
+
+
+    <form action="{% url 'createProduct' %}" class="container alert alert-primary" method="post">
+        <h1 class="alert alert-light text-center">Mahsulot qo'shish</h1>
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Qo'shish" class="m-1 btn btn-primary">
+    </form>
+{% endblock %}

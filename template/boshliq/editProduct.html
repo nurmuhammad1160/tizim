@@ -1,0 +1,18 @@
+{% extends 'boshliq/index.html' %}
+{% load static %}
+
+{% block title %}
+    Barcha mahsulotlar
+{% endblock %}
+
+
+
+{% block content %}
+<form action="" method="POST" class="container mt-4">
+<h1 class="alert alert-primary text-center">Mahsulotlarni tahrirlash</h1>
+
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-primary" value="Submit">
+ </form>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ro'yhatdan o'tish</title>
+
+  <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon/favicon.ico' %}"/>
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+</head>
+<body>
+    <!-- <form action="{% url 'login' %}" method="POST" >
+        {% csrf_token %}
+        <div class="container">
+
+        <h1 class="text-primary text-center alert alert-primary" style="margin-top: 30px;">Ro'yhatdan o'tish</h1>
+        {{form.as_p}}
+        <input class="btn btn-primary p-2" type="submit" value="Kirish"/>
+    </div>
+    </form> -->
+
+    <form action="{% url 'login' %}" method="POST" class="container">
+        {% csrf_token %}
+        <div class="contaner" style="line-height: 100px;">
+        <h1 class="text-primary text-center alert alert-primary" style="margin-top: 30px;">Ro'yhatdan o'tish</h1> 
+        <input type="text" name="username" id="username" placeholder="username" class="form-control p-3" style="margin-top: 40px;"> 
+        <input type="password" name="password" id="password" placeholder="password" class="form-control p-3" style="margin-top: 20px;">
+        <input type="submit" value="Kirish" class="btn btn-primary">
+    </div>
+
+    </form>
+</body>
+</html>

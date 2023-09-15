@@ -1,0 +1,17 @@
+{% extends 'boshliq/index.html' %}
+
+{% block title %}
+    Userlar qo'shish
+{% endblock %}
+
+{% block content %}
+
+
+
+    <form class="container alert alert-primary" method="post">
+        <h1 class="alert alert-light text-center">User qo'shish</h1>
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Qo'shish" class="m-1 btn btn-primary">
+    </form>
+{% endblock %}

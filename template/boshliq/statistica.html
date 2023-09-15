@@ -1,0 +1,126 @@
+{% extends 'boshliq/index.html' %}
+{% load static %}
+
+{% block title %}
+Barcha mahsulotlar
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="container mt-5">
+
+
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Statistica /</span> Mahsulotlarni saralash</h4>
+    <div class="row">
+
+        <div class="col-3">
+            <input type="text" id="q" class="form-control p-3 m-3 container" placeholder="Qidirish..."
+                aria-label="Search..." />
+        </div>
+
+        <div class="col-3">
+            <select class="form-select p-3 m-3" aria-label="Default select example">
+                <option selected>Open this select menu</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+        </div>
+        <div class="col-3">
+
+        </div>
+
+    </div>
+    <div class="card">
+        <h5 class="card-header">Barcha mahsulotlar</h5>
+        <div class="table-responsive text-nowrap ">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mahsulot haqida</th>
+                        <th>Amount</th>
+                        <th>Narxi</th>
+                        <th>Tahrirlash</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0" id="tbody">
+                    {% for product in product %}
+
+                    <tr>
+
+                        <td>
+                            <a href="{% url 'detail' product.id %}">
+                                {{ product.name }}
+                            </a>
+                        </td>
+                        </a>
+                        <td>{{ product.info|slice:'0:20' }}...</td>
+                        <td>
+                            {{ product.amount }}
+                        </td>
+                        <td>{{ product.price }}</td>
+                        <td>
+                            <div class="d-flex ">
+
+                                <a class="btn btn-primary" href="{% url 'edit' product.id %}"><i
+                                        class="bx bx-edit-alt me-1"></i> Edit</a>
+                                <a style="margin-left: 10px;" class="btn btn-danger"
+                                    href="{% url 'delete' product.id %}" onclick="return confirm('Ochiramizmi?')"><i
+                                        class="bx bx-trash me-1"></i> Delete</a>
+
+
+
+
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% block search %}
+<script>
+    $(document).ready(function () {
+
+        $('#q').on("keyup", function () {
+            table = $('#tbody')
+            q = $('#q').val()
+            $.ajax({
+                type: 'GET',
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                url: "{% url 'productSearch' %}",
+                data: {
+                    'q': q,
+                },
+                success: function (response) {
+                    table.empty()
+                    console.log(response);
+                    for (var i = 0; i < response.length; i++) {
+                        console.log(response);
+                        var del = "/delete/" + response[i].id;
+                        var edit = "/edit/" + response[i].id;
+                        var view = "/view/" + response[i].id;
+                        var nom = "Delete"
+                        var nomi = "Edit"
+                        table.append("<tr> <td><a href=\"" + view + "\">" + response[i].name + "</a></td><td>" + response[i].info + "<td>" + response[i].amount + "</td>" + "<td>" + response[i].price + "</td>" + "<td> <a href=\"" + del + "\">" + nom + "</a> <a href=\"" + edit + "\">" + nomi + "</a> </td>" + " </td></tr>")
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+
+
+            })
+        });
+    });
+</script>
+{% endblock %}
+
+{% endblock %}

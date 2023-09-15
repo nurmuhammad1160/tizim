@@ -1,0 +1,89 @@
+{% extends 'income/base.html' %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="col-8 m-md-auto alert alert-danger mx-auto">
+             <form id="search-form">
+                <input type="text" id="search-box"  class="form-control border-0 shadow-none"
+                placeholder="Nima sotmoqchisiz?"  value="{{ request.GET.q }}">
+                
+            </form>
+            
+            <ul id="results" class="alert alert-success mt-5 list-unstyled">
+                {% for result in results %}
+                    <li>{{ result.name }}</li>
+
+                {% empty %}
+                    <li>Biror narsa qidirishingiz mumkin</li>
+                {% endfor %}
+            </ul>
+          
+           
+           
+        </div>
+        <div class="col-2">
+           
+                <button id="sotish" class="btn btn-info" ><i class='bx bx-shopping-bag'></i> Sotish <span class="badge badge-light" id="pamount"></span> </button>
+        </div>
+    </div>
+  
+</div>
+
+<script>
+      $(function(){
+        $('#sotish').hide();
+        $('#search-form').keyup('search-box', event => {
+            event.preventDefault();
+            const searchUrl = '{% url "searchProduct" %}';
+            const query = $('#search-box').val();
+          
+            const url = `${searchUrl}?q=${query}`;
+            $.getJSON(url, data => {
+                $('#results').empty();
+                if (data.results.length > 0) {
+                    data.results.forEach(result => {
+                        if (result.amount < 1) {
+                            $('#results').append(`<li class="d-flex align-items-center justify-content-between my-2 "> <span class="alert alert-info">
+                                ${result.name}
+                            </span> <span class="alert alert-danger">mahsulot qolmagan</span>  </li><hr>`);
+                        } else {
+                            $('#results').append(`<li class="d-flex align-items-center justify-content-between my-2  ">  <span class="alert alert-info">
+                                ${result.name}
+                            </span> <span class="alert alert-danger">${result.amount} dona bor</span>   <input type="checkbox" value="${result.id}" class="form-check-input checkbox-lg" autocomplete="off"></li><hr>`);
+                        }
+                    });
+                } else {
+                    $('#results').append('<li>Hech narsa topilmadi</li>');
+                }
+            
+                $('input[type=checkbox]').on('change', function() {
+                    var ids = [];
+                    $('input[type=checkbox]:checked').each(function() {
+                        ids.push($(this).val());
+                    });
+                    
+                    if (ids.length > 0) {
+                        $('#sotish').show();
+                       $('#pamount').text(ids.length)
+                    } else {
+                        $('#sotish').hide();
+                    }
+            
+                    $('#sotish').data('ids', ids);
+                });
+            });
+            
+            $('#sotish').on('click', function() {
+                var ids = $(this).data('ids');
+                var url = '/sell/?ids=' + ids.join(',');
+                window.location.href = url;
+            });
+            
+     
+            
+        });
+      })
+    </script>
+
+{% endblock content %}
